@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Dashboard · SentimentAI{% endblock %}
+{% block content %}
+<section class="hero compact"><p class="eyebrow">ANALYTICS OVERVIEW</p><h1>Sentiment Dashboard</h1><p class="muted">Summary of saved text analyses.</p></section>
+{% if not db_ok %}<div class="alert error">MongoDB is unavailable. Start MongoDB or check MONGO_URI in .env.</div>{% endif %}
+<div class="stats"><div class="stat"><span>Total analyses</span><strong>{{ stats.total }}</strong></div>
+<div class="stat"><span>Positive</span><strong>{{ stats.positive }}</strong></div><div class="stat"><span>Negative</span><strong>{{ stats.negative }}</strong></div><div class="stat"><span>Neutral</span><strong>{{ stats.neutral }}</strong></div></div>
+<section class="panel"><h2>Sentiment distribution</h2>
+{% if stats.total %}<div class="chart-wrap"><canvas id="sentimentChart"></canvas></div>{% else %}<p class="muted">No saved analyses yet. Analyze a review to populate this chart.</p>{% endif %}</section>
+<section class="panel"><h2>Recent analyses</h2>{% if records %}<div class="table-wrap"><table><thead><tr><th>Text</th><th>Source</th><th>Sentiment</th><th>Confidence</th><th>Date</th></tr></thead><tbody>
+{% for item in records %}<tr><td class="review-cell">{{ item.text }}</td><td>{{ item.source }}</td><td><span class="tag {{ item.sentiment }}">{{ item.sentiment|title }}</span></td><td>{{ item.score }}%</td><td>{{ item.created_at.strftime('%d %b %Y %H:%M') if item.created_at else '—' }}</td></tr>{% endfor %}
+</tbody></table></div>{% else %}<p class="muted">No analysis history found.</p>{% endif %}</section>
+{% if stats.total %}<script>
+new Chart(document.getElementById("sentimentChart"), {type:"doughnut",data:{labels:["Positive","Negative","Neutral"],datasets:[{data:{{ chart_data|tojson }},backgroundColor:["#16a36a","#e05252","#e4a72c"],borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:"bottom"}}}});
+</script>{% endif %}
+{% endblock %}

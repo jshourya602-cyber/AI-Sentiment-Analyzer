@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Analyze · SentimentAI{% endblock %}
+{% block content %}
+<section class="hero"><p class="eyebrow">UNDERSTAND WHAT PEOPLE FEEL</p><h1>AI-Based <span>Sentiment Analyzer</span></h1>
+<p class="muted">Analyze reviews and comments as positive, negative, or neutral using a Transformer model.</p></section>
+<section class="panel"><h2>Analyze a review</h2>
+<form action="{{ url_for('analyze') }}" method="POST">
+<label for="review">Review or comment</label>
+<textarea id="review" name="review" rows="7" maxlength="5000" required placeholder="The product quality is excellent and delivery was quick..."></textarea>
+<label for="source">Text source</label><select id="source" name="source"><option>Product Review</option><option>Social Media</option><option>Customer Feedback</option><option>Manual</option></select>
+<button type="submit">Analyze sentiment</button></form></section>
+<div class="quick"><div><b>Positive</b><p>Excellent quality and fast delivery!</p></div><div><b>Negative</b><p>Poor service. Very disappointed.</p></div><div><b>Neutral</b><p>The parcel arrived on Monday.</p></div></div>
+{% endblock %}

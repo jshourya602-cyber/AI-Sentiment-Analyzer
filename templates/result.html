@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Result · SentimentAI{% endblock %}
+{% block content %}
+<section class="panel result-panel"><p class="eyebrow">ANALYSIS COMPLETE</p><h1>Sentiment result</h1>
+<div class="sentiment {{ review.sentiment }}">{{ review.sentiment|title }}</div>
+<p class="muted">Model confidence: <strong>{{ review.score }}%</strong></p>
+<div class="meter"><div class="{{ review.sentiment }}" style="width: {{ review.score }}%"></div></div>
+<h3>Submitted text</h3><blockquote>{{ review.text }}</blockquote><p class="small">Source: {{ review.source }}</p>
+{% if saved %}<p class="success">Saved to MongoDB history.</p>{% else %}<p class="warning">Analysis completed, but MongoDB was unavailable. This result was not saved.</p>{% endif %}
+<a class="button secondary" href="{{ url_for('index') }}">Analyze another</a><a class="button" href="{{ url_for('dashboard') }}">View dashboard</a></section>
+{% endblock %}
